@@ -1,0 +1,11 @@
+11:freezer:/sandbox-1d3254
+10:blkio:/
+9:cpu,cpuacct:/sandbox-root-siNKWg/sandbox-service-9857cb/sandbox-36b98a
+8:pids:/
+7:hugetlb:/
+6:devices:/
+5:cpuset:/
+4:memory:/sandbox-service-062f38/sandbox-dfb3bf
+3:net_cls,net_prio:/
+2:perf_event:/
+1:name=systemd:/system.slice/sandbox.service
