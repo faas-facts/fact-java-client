@@ -125,8 +125,10 @@ public class AWSFact implements PlatformFact {
         trace.putTags("rid",ctx.getAwsRequestId());
         trace.putLogs(System.currentTimeMillis(), "RenamingTime"+String.valueOf(ctx.getRemainingTimeInMillis()));
         if(ctx.getClientContext() != null) {
-            trace.putAllEnv(ctx.getClientContext().getEnvironment());
-            trace.putAllEnv(ctx.getClientContext().getCustom());
+            if (Fact.conf.isIncludeEnviroment()) {
+                trace.putAllEnv(ctx.getClientContext().getEnvironment());
+                trace.putAllEnv(ctx.getClientContext().getCustom());;
+            }
         }
 
         double elat = Math.floorDiv((System.currentTimeMillis() - Fact.startTime) ,100L);

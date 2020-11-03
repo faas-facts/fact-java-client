@@ -67,7 +67,7 @@ public class Fact {
         return Timestamp.newBuilder().setSeconds(Calendar.getInstance().getTime().getTime()).build();
     }
 
-    static FactConfiguration conf;
+    public static FactConfiguration conf;
 
     static void send(Phase message){
         Trace trace = Fact.trace.build();
@@ -85,7 +85,9 @@ public class Fact {
         Fact.trace = Trace.newBuilder();
 
         //gather first facts
-        trace.putAllEnv(System.getenv());
+        if (conf.isIncludeEnviroment()) {
+            trace.putAllEnv(System.getenv());
+        }
         trace.setBootTime(now());
         trace.setContainerID(ContainerID.toString());
         trace.setRuntime(RuntimeString);

@@ -6,11 +6,18 @@ public class FactConfiguration {
     private final FactIO io;
     private final boolean sendOnUpdate;
 
+    public boolean isIncludeEnviroment() {
+        return includeEnviroment;
+    }
 
-    public FactConfiguration(boolean lazyLoading, FactIO io, boolean sendOnUpdate) {
+    private final boolean includeEnviroment;
+
+
+    public FactConfiguration(boolean lazyLoading, FactIO io, boolean sendOnUpdate, boolean includeEnviroment) {
         this.lazyLoading = lazyLoading;
         this.io = io;
         this.sendOnUpdate = sendOnUpdate;
+        this.includeEnviroment = includeEnviroment;
     }
 
     public boolean isLazyLoading() {
