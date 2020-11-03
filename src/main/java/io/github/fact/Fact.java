@@ -80,8 +80,11 @@ public class Fact {
 
 
     public static void boot(FactConfiguration configuration) {
+        //init Fact
         Fact.conf = configuration;
+        Fact.trace = Trace.newBuilder();
 
+        //gather first facts
         trace.putAllEnv(System.getenv());
         trace.setBootTime(now());
         trace.setContainerID(ContainerID.toString());
