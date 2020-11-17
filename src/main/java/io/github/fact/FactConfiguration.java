@@ -31,4 +31,14 @@ public class FactConfiguration {
     public boolean isSendOnUpdate() {
         return sendOnUpdate;
     }
+
+    @Override
+    public String toString() {
+        return "FactConfiguration{" +
+                "lazyLoading=" + lazyLoading +
+                ", io=" + io.getClass().getName() +
+                ", sendOnUpdate=" + sendOnUpdate +
+                ", includeEnviroment=" + includeEnviroment +
+                '}';
+    }
 }

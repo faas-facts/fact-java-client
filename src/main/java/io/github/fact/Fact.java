@@ -1,5 +1,6 @@
 package io.github.fact;
 
+import com.amazonaws.services.lambda.runtime.Context;
 import com.google.protobuf.Duration;
 import com.google.protobuf.Timestamp;
 import io.github.fact.providers.AWSFact;
@@ -10,6 +11,8 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class Fact {
+
+    private static Trace base;
 
     public enum Phase{
         provisioned,
@@ -50,17 +53,27 @@ public class Fact {
             AWSFact.getInstances().init(trace,context);
             provider = Provider.AWS;
         } else if(gcf_key != null) {
+            //TODO GCF.init
             provider = Provider.GCF;
         } else if(acf_key != null) {
+            //TODO ACF.init
             provider = Provider.ACF;
         } else if(ow_key != null) {
+            //TODO OW.init
             if (Files.exists(Path.of("/sys/hypervisor/uuid"))){
                 provider = Provider.ICF;
             } else {
                 provider = Provider.OWk;
             }
         } else {
+            //TODO OW.init
             provider = Provider.UND;
+            trace.setPlatform(provider.name());
+            if(!OperatingSystem.isWindows) {
+                String uptime = readFile("/proc/uptime").trim();
+                trace.putTags("uptime", uptime);
+                trace.setHostID("U"+uptime);
+            }
         }
     }
     private static Timestamp now() {
@@ -74,7 +87,12 @@ public class Fact {
         try {
             conf.getIo().send(message.name(),trace);
         } catch (IOException e) {
-            System.err.printf("failed to send %s:%s - %s\n",message,trace,e.getMessage());
+            if(conf.isIncludeEnviroment()){
+                System.err.printf("failed to send %s:%s - %s\n",message,trace,e.getMessage());
+            } else {
+                System.err.printf("failed to send %s:%s - %s\n",message,trace.getID(),e.getMessage());
+            }
+
         }
     }
 
@@ -99,8 +117,7 @@ public class Fact {
                 send(Phase.provisioned);
             }
         }
-
-       
+        Fact.base = trace.build();
     }
 
     private static void load(Object context) {
@@ -111,7 +128,11 @@ public class Fact {
     public static long startTime;
 
     public static void start(Object context, Object event){
+        Fact.trace = Trace.newBuilder();
+        trace.mergeFrom(Fact.base);
+
         startTime = System.currentTimeMillis();
+        trace.setID(UUID.randomUUID().toString());
         trace.setStartTime(now());
         if (provider == null){
             load(context);
@@ -169,5 +190,14 @@ public class Fact {
 
         send(Phase.done);
 
+
+    }
+
+    public static String getID(){
+        return trace.getID();
+    }
+
+    public void setChildOf(String id){
+        trace.setChildOf(id);
     }
 }

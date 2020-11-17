@@ -41,5 +41,11 @@ public class TCPSender implements FactIO {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "TCPSender{" +
+                "address='" + address + '\'' +
+                ", port=" + port +
+                '}';
+    }
 }
