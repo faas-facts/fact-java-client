@@ -27,7 +27,7 @@ static {
     }
 ```
 
-After the fact has been started, it can be used to start, update and close traces 
+After the fact client has been started, it can be used to start, update and close traces 
 using `Fact.start`, `Fact.update` and `Fact.done`. Each of these functions take a context object to identify the trace.
 An example implementation can be found [here](https://github.com/faas-facts/fact/tree/main/examples/java-aws).
 
