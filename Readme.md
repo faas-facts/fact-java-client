@@ -1,6 +1,17 @@
 # java-fact-client
 
 Java client for the [fact](https://github.com/faas-facts/fact) library.
+### Setup
+First add the fact dependency to the pom
+ ``` 
+      <dependency>
+        <groupId>io.github.fact</groupId>
+        <artifactId>client</artifactId>
+        <version>0.1.1</version>
+      </dependency> 
+```
+Make sure Maven is configured to use Github packages if you haven't follow [this guide](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages).
+Use `mvn package` to generate the jar for your function.
 
 ## Usage
 Import the fact package into your FaaS-function code and use the provided methods to generate
